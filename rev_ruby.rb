@@ -1,8 +1,9 @@
 require 'socket'
 require 'open3'
 
-hostname = 'localhost'
-port = 1234
+
+hostname = 'localhost' #change this
+port = 1234 #and this
 
 s = TCPSocket.open(hostname, port)
 
